@@ -1,5 +1,5 @@
 # 0x00. AirBnB clone - The console
-====================================================
+-----------------------------------
 -   By Guillaume
 -----------------
 -   Weight: 5
@@ -13,7 +13,7 @@
 -   Manual QA review must be done (request it when you are done with the project)
 ------------------------
 -   An auto review will be launched at the deadline
-======================================================
+----------------------------------------------------
 
 <img src="https://s3.amazonaws.com/intranet-projects-files/holbertonschool-higher-level_programming+/263/HBTN-hbnb-Final.png">
 
@@ -59,7 +59,7 @@ Do you remember the Shell? It’s exactly the same but limited to a specific use
 
 - [cmd module](https://docs.python.org/3.8/library/cmd.html)
 - [cmd module in depth](http://pymotw.com/2/cmd/)
-- `packages concept page`
+- **packages concept page**
 - [uuid module](https://docs.python.org/3.8/library/uuid.html)
 - [datetime](https://docs.python.org/3.8/library/datetime.html)
 - [unittest module](https://docs.python.org/3.8/library/unittest.html#module-unittest)
@@ -173,5 +173,5 @@ $
 ```
 All tests should also pass in non-interactive mode: `$ echo "python3 -m unittest discover tests" | bash`
 
-<img src="https://s3.amazonaws.com/alx-intranet.hbtn.io/uploads/medias/2018/6/815046647d23428a14ca.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIARDDGGGOUSBVO6H7D%2F20230512%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20230512T141059Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=65dbb9ae9f8f342de83e0636624c521560c276b630bcc0c4543d3b5839494a29">
+![](https://s3.amazonaws.com/alx-intranet.hbtn.io/uploads/medias/2018/6/815046647d23428a14ca.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIARDDGGGOUSBVO6H7D%2F20230512%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20230512T141059Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=65dbb9ae9f8f342de83e0636624c521560c276b630bcc0c4543d3b5839494a29)
 
