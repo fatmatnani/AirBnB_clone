@@ -103,7 +103,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
         else:
             print([str(v) for v in models.storage.all()])
-
+    
     def do_update(self, arg):
         """
     Updates an instance based on the class name and id by adding or
@@ -111,25 +111,32 @@ class HBNBCommand(cmd.Cmd):
     Usage: update <class name> <id> <attribute name> "<attribute value>"
         """
     # Use regular expressions to parse the command input
-        match = re.match(r'^update (\w+) (\w+) (\w+) (.+)$', arg)
+        match = re.match(r'^update (\w+) (\w+) ({.+})$', arg)
         if match:
             class_name = match.group(1)
             instance_id = match.group(2)
-            attribute_name = match.group(3)
-            attribute_value = match.group(4).strip('"')
+            update_dict = match.group(3)
+
+        # Convert the JSON object to a dictionary
+        try:
+            update_dict = json.loads(update_dict.replace("'", '"'))
+        except ValueError:
+            print("** invalid JSON syntax **")
+            return
 
         # Get the instance from the data store
-        instance = self.storage.get(class_name, instance_id)
+        instance = models.storage.get(class_name, instance_id)
 
         if instance is None:
             print("** no instance found **")
             return
 
-        # Update the attribute value
-        setattr(instance, attribute_name, attribute_value)
+        # Update the instance attributes with the values from the dictionary
+        for key, value in update_dict.items():
+            setattr(instance, key, value)
 
         # Save the changes to the data store
-        self.storage.save()
+        models.storage.save()
 
         else:
         print("** invalid update syntax **")
