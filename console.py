@@ -13,6 +13,7 @@ from models.state import State
 from models.user import User
 import models
 import re
+import json
 
 
 class HBNBCommand(cmd.Cmd):
@@ -106,40 +107,60 @@ class HBNBCommand(cmd.Cmd):
     
     def do_update(self, arg):
         """
-    Updates an instance based on the class name and id by adding or
-    updating attribute (save the change into the JSON file).
-    Usage: update <class name> <id> <attribute name> "<attribute value>"
+        Updates an instance based on the class name and id by adding or
+        updating attribute (save the change into the JSON file).
+        Usage: update <class name> <id> <attribute name> "<attribute value>"
         """
-    # Use regular expressions to parse the command input
-        match = re.match(r'^update (\w+) (\w+) ({.+})$', arg)
+        # Use regular expressions to parse the command input
+        match = re.match(r'^update (\w+) (\w+) {\'(.+)\'}$', arg)
         if match:
             class_name = match.group(1)
             instance_id = match.group(2)
             update_dict = match.group(3)
+            update_dict = json.loads(update_dict)
 
-        # Convert the JSON object to a dictionary
-        try:
-            update_dict = json.loads(update_dict.replace("'", '"'))
-        except ValueError:
-            print("** invalid JSON syntax **")
-            return
+            # Convert the JSON object to a dictionary
+            try:
+                update_dict = json.loads(update_dict.replace("'", '"'))
+            except ValueError:
+                print("** invalid JSON syntax **")
+                return
 
-        # Get the instance from the data store
-        instance = models.storage.get(class_name, instance_id)
+            # Get the instance from the data store
+            instance = models.storage.get(class_name, instance_id)
 
-        if instance is None:
-            print("** no instance found **")
-            return
+            if instance is None:
+                print("** no instance found **")
+                return
 
-        # Update the instance attributes with the values from the dictionary
-        for key, value in update_dict.items():
-            setattr(instance, key, value)
+            # Update the instance attributes with the values from the dictionary
+            for key, value in update_dict.items():
+                setattr(instance, key, value)
 
-        # Save the changes to the data store
-        models.storage.save()
-
+            # Save the changes to the data store
+            models.storage.save()
         else:
-        print("** invalid update syntax **")
+            print("** invalid update syntax **")
+        
+        """   
+    def do_update(self, arg):
+        match = re.match(r'^update (\w+) (\w+) {\'(.+)\'}$', arg)
+        if match:
+            class_name = match.group(1)  
+            instance_id = match.group(2)  
+            update_dict = match.group(3)
+            update_dict = json.loads(update_dict)
+       
+       instance = models.storage.get(class_name, instance_id)
+       
+       for key, value in update_dict.items():
+           setattr(instance, key, value)
+       
+       models.storage.save()
+    
+        else:
+            print("** invalid update syntax **")
+            """
 
     def do_count(self, arg):
         """
@@ -151,24 +172,6 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
         else:
             print(len(models.class_dict[arg].all()))
-
-    def do_show(self, arg):
-        """
-        Retrieve an instance based on its ID.
-        """
-        args = arg.split()
-        if not arg:
-            print("** class name missing **")
-        elif args[0] not in models.class_dict:
-            print("** class doesn't exist **")
-        elif len(args) < 2:
-            print("** instance id missing **")
-        else:
-            key = "{}.{}".format(args[0], args[1])
-            if key not in models.storage.all():
-                print("** no instance found **")
-            else:
-                print(models.storage.all()[key])
 
     def default(self, arg):
         """
