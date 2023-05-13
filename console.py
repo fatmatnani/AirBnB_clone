@@ -34,9 +34,9 @@ class HBNBCommand(cmd.Cmd):
         """
         return True
 
-    def emptyline(self):
+    def emptyarg(self):
         """
-        Do nothing when empty line is entered.
+        Do nothing when empty arg is entered.
         """
         pass
 
@@ -111,56 +111,44 @@ class HBNBCommand(cmd.Cmd):
         updating attribute (save the change into the JSON file).
         Usage: update <class name> <id> <attribute name> "<attribute value>"
         """
-        # Use regular expressions to parse the command input
-        match = re.match(r'^update (\w+) (\w+) {\'(.+)\'}$', arg)
-        if match:
-            class_name = match.group(1)
-            instance_id = match.group(2)
-            update_dict = match.group(3)
-            update_dict = json.loads(update_dict)
-
-            # Convert the JSON object to a dictionary
-            try:
-                update_dict = json.loads(update_dict.replace("'", '"'))
-            except ValueError:
-                print("** invalid JSON syntax **")
-                return
-
-            # Get the instance from the data store
-            instance = models.storage.get(class_name, instance_id)
-
-            if instance is None:
-                print("** no instance found **")
-                return
-
-            # Update the instance attributes with the values from the dictionary
-            for key, value in update_dict.items():
-                setattr(instance, key, value)
-
-            # Save the changes to the data store
-            models.storage.save()
+        if len(arg) == 0:
+            print("** class name missing **")
         else:
-            print("** invalid update syntax **")
-        
-        """   
-    def do_update(self, arg):
-        match = re.match(r'^update (\w+) (\w+) {\'(.+)\'}$', arg)
-        if match:
-            class_name = match.group(1)  
-            instance_id = match.group(2)  
-            update_dict = match.group(3)
-            update_dict = json.loads(update_dict)
-       
-       instance = models.storage.get(class_name, instance_id)
-       
-       for key, value in update_dict.items():
-           setattr(instance, key, value)
-       
-       models.storage.save()
-    
-        else:
-            print("** invalid update syntax **")
-            """
+            pattern = "[^\s\"\']+|\"[^\"]*\"|\'[^\']*\'"
+            pattern = re.compile(pattern)
+            arg = re.findall(pattern, arg)
+            for i in range(len(arg)):
+                arg[i] = arg[i].strip("\"'")
+            if arg[0] in models.class_dict:
+                try:
+                    obj_id = arg[0] + '.' + arg[1]
+                except IndexError:
+                    print("** instance id missing **")
+                else:
+                    try:
+                        obj = models.storage.all()[obj_id]
+                    except KeyError:
+                        print("** no instance found **")
+                    else:
+                        try:
+                            attr = arg[2]
+                        except IndexError:
+                            print("** attribute name missing **")
+                        else:
+                            try:
+                                val = arg[3]
+                            except IndexError:
+                                print("** value missing **")
+                            else:
+                                try:
+                                    setattr(obj, attr, val)
+                                except AttributeError:
+                                    print("** cannot set val: {}".format(val) +
+                                          " for attr: ({}) **".format(attr))
+                                else:
+                                    obj.save()
+            else:
+                print("** class doesn't exist **")
 
     def do_count(self, arg):
         """
