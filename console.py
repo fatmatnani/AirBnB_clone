@@ -75,7 +75,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_destroy(self, arg):
         """
-        Deletes an instance based on the class name and id, and save the changes
+        Deletes an instance based on the class name and id,and save the changes
         into the JSON file.
         """
         args = arg.split()
@@ -104,7 +104,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
         else:
             print([str(v) for v in models.storage.all()])
-    
+
     def do_update(self, arg):
         """
         Updates an instance based on the class name and id by adding or
@@ -114,7 +114,7 @@ class HBNBCommand(cmd.Cmd):
         if len(arg) == 0:
             print("** class name missing **")
         else:
-            pattern = "[^\s\"\']+|\"[^\"]*\"|\'[^\']*\'"
+            pattern = "[^\\s\"\']+|\"[^\"]*\"|\'[^\']*\'"
             pattern = re.compile(pattern)
             arg = re.findall(pattern, arg)
             for i in range(len(arg)):

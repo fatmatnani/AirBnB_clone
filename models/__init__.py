@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-"""This script import FileStorage and read existing data into the `storage` variable"""
+"""This script import FileStorage and read
+existing data into the `storage` variable"""
 
 from models.engine.file_storage import FileStorage
 from models.base_model import BaseModel
