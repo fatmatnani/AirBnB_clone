@@ -8,6 +8,8 @@ from datetime import datetime
 
 class BaseModel:
     """BaseModel class to be inherited by other classes"""
+    __objects = {}
+
     def __init__(self, *args, **kwargs):
         """__init__ method & instantiation of class Basemodel"""
         self.id = str(uuid.uuid4())
@@ -20,6 +22,7 @@ class BaseModel:
             setattr(self, name, value)
         if "id" not in kwargs:
             models.storage.new(self)
+        self.__objects[self.id] = self
 
     def __setattr__(self, name, value):
         """Maintain correct types for non-string attributes while keeping
@@ -59,3 +62,8 @@ class BaseModel:
         d['updated_at'] = d['updated_at'].isoformat()
         d['__class__'] = self.__class__.__name__
         return d
+
+    @classmethod
+    def all(cls):
+        """Returns a dictionary containing all instances of the class"""
+        return cls.__objects
