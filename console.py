@@ -34,9 +34,9 @@ class HBNBCommand(cmd.Cmd):
         """
         return True
 
-    def emptyarg(self):
+    def emptyline(self):
         """
-        Do nothing when empty arg is entered.
+        Do nothing when empty line is entered.
         """
         pass
 
@@ -192,5 +192,4 @@ class HBNBCommand(cmd.Cmd):
 
 
 if __name__ == '__main__':
-    '''command loop'''
     HBNBCommand().cmdloop()
